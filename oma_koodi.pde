@@ -1,4 +1,3 @@
 void arvot() {
-  savy = kulma + r;
-  kirkkaus = r - aika * 100;
+  savy = viimeiset(2, x);
 }
