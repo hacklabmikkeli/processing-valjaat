@@ -77,7 +77,13 @@ void restoreData() {
   quality = backupDataFields.quality;
 }
 
+int readByte2() {
+  while (port.available() == 0) { /* wait */ }
+  return port.read();
+}
+
 int readByte() {
+  while (port.available() == 0) { /* wait */ }
   int data = port.read();
   i++;
   payloadChecksum += data;
@@ -95,27 +101,33 @@ int readThreeBytes() {
 }
 
 void readWaves() {
-  delta = readThreeBytes() / 70000;
-  theta = readThreeBytes() / 70000;
-  lowAlpha = readThreeBytes() / 70000;
-  highAlpha = readThreeBytes() / 70000;
-  lowBeta = readThreeBytes() / 70000;
-  highBeta = readThreeBytes() / 70000;
-  lowGamma = readThreeBytes() / 70000;
-  midGamma = readThreeBytes() / 70000;
+  println("wave values changing");
+  delta = (3*delta + readThreeBytes() / 70000) / 4;
+  theta = (3*theta + readThreeBytes() / 70000) / 4;
+  lowAlpha = (3*lowAlpha + readThreeBytes() / 70000) / 4;
+  highAlpha = (3*highAlpha + readThreeBytes() / 70000) / 4;
+  lowBeta = (3*lowBeta + readThreeBytes() / 70000) / 4;
+  highBeta = (3*highBeta + readThreeBytes() / 70000) / 4;
+  lowGamma = (3*lowGamma + readThreeBytes() / 70000) / 4;
+  midGamma = (3*midGamma + readThreeBytes() / 70000) / 4;
 }
 
 void readSerial() {
+  try {
+    Thread.sleep(2);
+  } catch (InterruptedException ex) {
+  }
+  
   saveData();
   
   int data;
-  while ((data = port.read()) != 0xAA) {
+  while ((data = readByte2()) != 0xAA) {
   }
-  if ((data = port.read()) != 0xAA) {
+  if ((data = readByte2()) != 0xAA) {
     return;
   }
   
-  payloadLength = port.read();
+  payloadLength = readByte2();
   if (payloadLength < 0 || payloadLength > 169) {
     return;
   }
@@ -128,12 +140,15 @@ void readSerial() {
     switch (data) {
     case 0x02:
       quality = readByte();
+      
       break;
     case 0x04:
       attention = readByte();
+      println("attention changing");
       break;
     case 0x05:
       meditation = readByte();
+      println("meditation changing");
       break;
     case 0x80:
       while (i < payloadLength) {
@@ -146,6 +161,10 @@ void readSerial() {
     default:
       break;
     }
+  }
+  
+  if (quality > 50) {
+    restoreData();
   }
   
   int checksumExpected = port.read();
@@ -185,7 +204,7 @@ void setup() {
   colorMode(HSB, 360, 100, 100, 100);
   
   try {
-    port = new Serial(this, "/dev/rfcomm0", 57600);
+    port = new Serial(this, "/dev/rfcomm2", 57600);
     thread("readSerialForever");
   } catch (Exception ex) {
     print("Serial port disabled: " + ex.getMessage());
@@ -227,4 +246,29 @@ void draw() {
     }
   }   
   updatePixels();
+  
+  piirra();
+  
+  text("attention", 25, 30);
+  rect(20, 30, attention, 10);
+  text("meditation", 25, 60);
+  rect(20, 60, meditation, 10);
+  text("delta", 25, 90);
+  rect(20, 90, delta, 10);
+  text("theta", 25, 120);
+  rect(20, 120, theta, 10);
+  text("low alpha", 25, 150);
+  rect(20, 150, lowAlpha, 10);
+  text("high alpha", 25, 180);
+  rect(20, 180, highAlpha, 10);
+  text("low beta", 25, 210);
+  rect(20, 210, lowBeta, 10);
+  text("high beta", 25, 240);
+  rect(20, 240, highBeta, 10); 
+  text("low gamma", 25, 270);
+  rect(20, 270, lowGamma, 10);
+  text("high gamma", 25, 300);
+  rect(20, 300, midGamma, 10);
+  text("quality", 25, 330);
+  rect(20, 330, 255 - quality, 10);
 }
