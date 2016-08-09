@@ -31,17 +31,17 @@ class DataFields {
   int quality;
 }
 
-int attention;
-int meditation;
-int delta;
-int theta;
-int lowAlpha;
-int highAlpha;
-int lowBeta;
-int highBeta;
-int lowGamma;
-int midGamma;
-int quality;
+volatile int attention;
+volatile int meditation;
+volatile int delta;
+volatile int theta;
+volatile int lowAlpha;
+volatile int highAlpha;
+volatile int lowBeta;
+volatile int highBeta;
+volatile int lowGamma;
+volatile int midGamma;
+volatile int quality;
 
 DataFields backupDataFields = new DataFields();
 
@@ -167,7 +167,7 @@ void readSerial() {
     restoreData();
   }
   
-  int checksumExpected = port.read();
+  int checksumExpected = readByte2();
   payloadChecksum = 255 - (0xFF & payloadChecksum);
   if (payloadChecksum != checksumExpected) {
     println("CHECKSUM FAIL");
