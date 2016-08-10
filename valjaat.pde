@@ -92,24 +92,22 @@ int readByte() {
 
 int readThreeBytes() {
   int result = 0;
-  result += readByte();
-  result <<= 8;
-  result += readByte();
-  result <<= 8;
-  result += readByte();
+  result = readByte();
+  readByte();
+  readByte();
   return result;
 }
 
 void readWaves() {
   println("wave values changing");
-  delta = (3*delta + readThreeBytes() / 70000) / 4;
-  theta = (3*theta + readThreeBytes() / 70000) / 4;
-  lowAlpha = (3*lowAlpha + readThreeBytes() / 70000) / 4;
-  highAlpha = (3*highAlpha + readThreeBytes() / 70000) / 4;
-  lowBeta = (3*lowBeta + readThreeBytes() / 70000) / 4;
-  highBeta = (3*highBeta + readThreeBytes() / 70000) / 4;
-  lowGamma = (3*lowGamma + readThreeBytes() / 70000) / 4;
-  midGamma = (3*midGamma + readThreeBytes() / 70000) / 4;
+  delta = (3*delta + readThreeBytes()) / 4;
+  theta = (3*theta + readThreeBytes()) / 4;
+  lowAlpha = (3*lowAlpha + readThreeBytes()) / 4;
+  highAlpha = (3*highAlpha + readThreeBytes()) / 4;
+  lowBeta = (3*lowBeta + readThreeBytes()) / 4;
+  highBeta = (3*highBeta + readThreeBytes()) / 4;
+  lowGamma = (3*lowGamma + readThreeBytes()) / 4;
+  midGamma = (3*midGamma + readThreeBytes()) / 4;
 }
 
 void readSerial() {
