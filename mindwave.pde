@@ -3,29 +3,29 @@ import processing.serial.*;
 Serial mindWavePort;
 
 class DataFields {
-  int attention;
-  int meditation;
+  int huomio;
+  int meditointi;
   int delta;
   int theta;
-  int lowAlpha;
-  int highAlpha;
-  int lowBeta;
-  int highBeta;
-  int lowGamma;
-  int midGamma;
+  int matalaAlfa;
+  int korkeaAlfa;
+  int matalaBeta;
+  int korkeaBeta;
+  int matalaGamma;
+  int keskiGamma;
   int quality;
 }
 
-volatile int attention;
-volatile int meditation;
+volatile int huomio;
+volatile int meditointi;
 volatile int delta;
 volatile int theta;
-volatile int lowAlpha;
-volatile int highAlpha;
-volatile int lowBeta;
-volatile int highBeta;
-volatile int lowGamma;
-volatile int midGamma;
+volatile int matalaAlfa;
+volatile int korkeaAlfa;
+volatile int matalaBeta;
+volatile int korkeaBeta;
+volatile int matalaGamma;
+volatile int keskiGamma;
 volatile int quality;
 
 DataFields backupDataFields = new DataFields();
@@ -35,30 +35,30 @@ int payloadChecksum;
 int i;
 
 void saveData() {
-  backupDataFields.attention = attention;
-  backupDataFields.meditation = meditation;
+  backupDataFields.huomio = huomio;
+  backupDataFields.meditointi = meditointi;
   backupDataFields.delta = delta;
   backupDataFields.theta = theta;
-  backupDataFields.lowAlpha = lowAlpha;
-  backupDataFields.highAlpha = highAlpha;
-  backupDataFields.lowBeta = lowBeta;
-  backupDataFields.highBeta = highBeta;
-  backupDataFields.lowGamma = lowGamma;
-  backupDataFields.midGamma = midGamma;
+  backupDataFields.matalaAlfa = matalaAlfa;
+  backupDataFields.korkeaAlfa = korkeaAlfa;
+  backupDataFields.matalaBeta = matalaBeta;
+  backupDataFields.korkeaBeta = korkeaBeta;
+  backupDataFields.matalaGamma = matalaGamma;
+  backupDataFields.keskiGamma = keskiGamma;
   backupDataFields.quality = quality;
 }
 
 void restoreData() {
-  attention = backupDataFields.attention;
-  meditation = backupDataFields.meditation;
+  huomio = backupDataFields.huomio;
+  meditointi = backupDataFields.meditointi;
   delta = backupDataFields.delta;
   theta = backupDataFields.theta;
-  lowAlpha = backupDataFields.lowAlpha;
-  highAlpha = backupDataFields.highAlpha;
-  lowBeta = backupDataFields.lowBeta;
-  highBeta = backupDataFields.highBeta;
-  lowGamma = backupDataFields.lowGamma;
-  midGamma = backupDataFields.midGamma;
+  matalaAlfa = backupDataFields.matalaAlfa;
+  korkeaAlfa = backupDataFields.korkeaAlfa;
+  matalaBeta = backupDataFields.matalaBeta;
+  korkeaBeta = backupDataFields.korkeaBeta;
+  matalaGamma = backupDataFields.matalaGamma;
+  keskiGamma = backupDataFields.keskiGamma;
   quality = backupDataFields.quality;
 }
 
@@ -87,12 +87,12 @@ void readWaves() {
   println("wave values changing");
   delta = (3*delta + readThreeBytes()) / 4;
   theta = (3*theta + readThreeBytes()) / 4;
-  lowAlpha = (3*lowAlpha + readThreeBytes()) / 4;
-  highAlpha = (3*highAlpha + readThreeBytes()) / 4;
-  lowBeta = (3*lowBeta + readThreeBytes()) / 4;
-  highBeta = (3*highBeta + readThreeBytes()) / 4;
-  lowGamma = (3*lowGamma + readThreeBytes()) / 4;
-  midGamma = (3*midGamma + readThreeBytes()) / 4;
+  matalaAlfa = (3*matalaAlfa + readThreeBytes()) / 4;
+  korkeaAlfa = (3*korkeaAlfa + readThreeBytes()) / 4;
+  matalaBeta = (3*matalaBeta + readThreeBytes()) / 4;
+  korkeaBeta = (3*korkeaBeta + readThreeBytes()) / 4;
+  matalaGamma = (3*matalaGamma + readThreeBytes()) / 4;
+  keskiGamma = (3*keskiGamma + readThreeBytes()) / 4;
 }
 
 void readSerial() {
@@ -126,11 +126,11 @@ void readSerial() {
       
       break;
     case 0x04:
-      attention = readByte();
+      huomio = readByte();
       println("attention changing");
       break;
     case 0x05:
-      meditation = readByte();
+      meditointi = readByte();
       println("meditation changing");
       break;
     case 0x80:

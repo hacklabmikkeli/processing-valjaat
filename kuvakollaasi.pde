@@ -21,6 +21,10 @@ void lataa_kuvat() {
 }
 
 void piirra_kollaasi() {
+  if (!kuvakollaasi_paalla) {
+    return;
+  }
+  
   metsa_kirkkaus = 0;
   meri_kirkkaus = 0;
   kaupunki_kirkkaus = 0;

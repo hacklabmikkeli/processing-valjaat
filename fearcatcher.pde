@@ -1,14 +1,14 @@
 import io.socket.emitter.*;
 import io.socket.client.*;
 
-volatile int anger;
-volatile int contempt;
-volatile int disgust;
-volatile int fear;
-volatile int happiness;
-volatile int neutral;
-volatile int sadness;
-volatile int surprise;
+volatile int vihaisuus;
+volatile int halveksunta;
+volatile int kuvotus;
+volatile int pelko;
+volatile int onni;
+volatile int neutraali;
+volatile int surullisuus;
+volatile int yllattyneisyys;
 
 Socket socket;
 
@@ -20,14 +20,14 @@ void initFearCatcher() {
       public void call(Object... incoming) {
         org.json.JSONObject obj = (org.json.JSONObject)incoming[0];
         try {
-          anger = (int)(255.0 * obj.getDouble("anger"));
-          contempt = (int)(255.0 * obj.getDouble("contempt"));
-          disgust = (int)(255.0 * obj.getDouble("disgust"));
-          fear = (int)(255.0 * obj.getDouble("fear"));
-          happiness = (int)(255.0 * obj.getDouble("happiness"));
-          neutral = (int)(255.0 * obj.getDouble("neutral"));
-          sadness = (int)(255.0 * obj.getDouble("sadness"));
-          surprise = (int)(255.0 * obj.getDouble("surprise"));
+          vihaisuus = (int)(255.0 * obj.getDouble("anger"));
+          halveksunta = (int)(255.0 * obj.getDouble("contempt"));
+          kuvotus = (int)(255.0 * obj.getDouble("disgust"));
+          pelko = (int)(255.0 * obj.getDouble("fear"));
+          onni = (int)(255.0 * obj.getDouble("happiness"));
+          neutraali = (int)(255.0 * obj.getDouble("neutral"));
+          surullisuus = (int)(255.0 * obj.getDouble("sadness"));
+          yllattyneisyys = (int)(255.0 * obj.getDouble("surprise"));
         } catch (Exception ex) {
           ex.printStackTrace();
         }
